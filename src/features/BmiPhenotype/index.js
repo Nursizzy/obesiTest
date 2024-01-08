@@ -1,0 +1,1 @@
+export {BmiPhenotypePage} from './BmiPhenotypePage'

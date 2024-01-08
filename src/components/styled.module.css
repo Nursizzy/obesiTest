@@ -1,0 +1,22 @@
+.basicContainer {
+    display: flex;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.stepperContainer {
+    max-width: 22rem;
+    padding:1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    & img {
+        max-width: 20rem;
+        max-height: 4rem;
+    }
+}
+
+.contentContainer {
+    padding: 1rem;
+    overflow-y: scroll;
+}

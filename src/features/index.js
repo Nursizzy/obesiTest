@@ -1,0 +1,5 @@
+export {BmiPhenotypePage} from './BmiPhenotype'
+export {EnergyMetabolismPhenotypePage} from './EnergyMetabolismPhenotype'
+export {FoodEmotionalResponsePhenotypePage} from './FoodEmotionalResponsePhenotype'
+export {PostMealSatietyPhenotypePage} from './PostMealSatietyPhenotype'
+export {SatiationPhenotypePage} from './SatiationPhenotype'

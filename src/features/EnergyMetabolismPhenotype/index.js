@@ -1,0 +1,1 @@
+export {EnergyMetabolismPhenotypePage} from './EnergyMetabolismPhenotypePage'

@@ -1,0 +1,1 @@
+export {SatiationPhenotypePage} from './SatiationPhenotypePage'
