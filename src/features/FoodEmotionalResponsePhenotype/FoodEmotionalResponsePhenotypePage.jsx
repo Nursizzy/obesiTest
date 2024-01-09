@@ -21,6 +21,7 @@ import {
   fetchQuestions,
   setCurrentQuestionIndex,
 } from '../../store/slices/phenotypesSlice.js'
+import { useTranslation } from 'react-i18next'
 
 
 function LinearProgressWithLabel(props) {
@@ -35,8 +36,9 @@ function LinearProgressWithLabel(props) {
 }
 
 const Question = ({ question, selectedValue, onChange }) => {
+  const { t } = useTranslation()
   return (<FormControl component='fieldset' margin='normal'>
-    <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>{question.name}</FormLabel>
+    <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>{t(question.name)}</FormLabel>
     <RadioGroup
       name={question.key}
       value={selectedValue || ''}
@@ -46,7 +48,7 @@ const Question = ({ question, selectedValue, onChange }) => {
         key={variant.id}
         value={variant.value.toString()}
         control={<Radio />}
-        label={variant.name}
+        label={t(variant.name)}
       />))}
     </RadioGroup>
   </FormControl>)
@@ -54,7 +56,7 @@ const Question = ({ question, selectedValue, onChange }) => {
 
 // Main Questionnaire Component
 const Questionnaire = ({ questions = [], handleProgressBack, handleProgressNext }) => { // Set a default empty array if questions is undefined
-
+  const { t } = useTranslation()
 
   const { response, data, currentQuestionIndex } = useSelector(state => state.phenotypes.calculateEmotionalSatiation)
   const [answers, setAnswers] = useState(data)
@@ -85,38 +87,39 @@ const Questionnaire = ({ questions = [], handleProgressBack, handleProgressNext 
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const isAnswerSelected = answers[questions[currentQuestionIndex]?.key] !== undefined
 
-  return ( <>
-    {questions.length > 0 && (<div  style = {!isMobile ? {width:'50%', paddingRight:'12px', boxSizing:'border-box'} : {width:'100%'}}>
-      <Question
-        question={questions[currentQuestionIndex]}
-        selectedValue={answers[questions[currentQuestionIndex].key]}
-        onChange={handleChange}
-      />
-      <div style={{display: 'flex', gap:'1rem'}}>
-        <Button variant ={'contained'} onClick={handleBack} disabled={currentQuestionIndex === 0}>
-          Предыщущий вопрос
-        </Button>
-        {currentQuestionIndex === questions.length - 1 ? <Button onClick={handleNext}  variant ={'contained'} disabled={!isAnswerSelected}>
-          Закончить
-        </Button> : <Button variant ={'contained'} onClick={handleNext} disabled={!isAnswerSelected}>
-          Следующий вопрос
-        </Button>}
-      </div>
-    </div>)}
-    {response.result && <Card sx = {!isMobile ? {width:'50%'} : {width:'100%'}}>
+  return (<>
+    {questions.length > 0 && (
+      <div style={!isMobile ? { width: '50%', paddingRight: '12px', boxSizing: 'border-box' } : { width: '100%' }}>
+        <Question
+          question={questions[currentQuestionIndex]}
+          selectedValue={answers[questions[currentQuestionIndex].key]}
+          onChange={handleChange}
+        />
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <Button variant={'contained'} onClick={handleBack} disabled={currentQuestionIndex === 0}>
+            {t('Предыщущий вопрос')}
+          </Button>
+          {currentQuestionIndex === questions.length - 1 ?
+            <Button onClick={handleNext} variant={'contained'} disabled={!isAnswerSelected}>
+              {t('Закончить')}
+            </Button> : <Button variant={'contained'} onClick={handleNext} disabled={!isAnswerSelected}>
+              {t('Следующий вопрос')}
+            </Button>}
+        </div>
+      </div>)}
+    {response.result && <Card sx={!isMobile ? { width: '50%' } : { width: '100%' }}>
 
       <CardContent>
-        <Typography>Показатель Фенотипа: <Typography variant={'h6'}
-                                                     sx={{ fontWeight: 'bold' }}>Уровень
-          Тревоги: {response.result[0]}</Typography>
+        <Typography>{t('Показатель Фенотипа')}: <Typography variant={'h6'}
+                                                            sx={{ fontWeight: 'bold' }}>{t('Уровень Тревоги')}: {response.result[0]}</Typography>
           <Typography variant={'h6'}
-                      sx={{ fontWeight: 'bold' }}>Уровень Депрессии: {response.result[1]}</Typography>
+                      sx={{ fontWeight: 'bold' }}>{t('Уровень Депрессии')}: {response.result[1]}</Typography>
         </Typography>
         <Typography
         >Заключение:<Typography variant={'h6'}
-                                sx={{ fontWeight: 'bold' }}>{response.message[0]}</Typography>
+                                sx={{ fontWeight: 'bold' }}>{t(response.message[0])}</Typography>
           <Typography variant={'h6'}
-                      sx={{ fontWeight: 'bold' }}>{response.message[1]}</Typography></Typography>
+                      sx={{ fontWeight: 'bold' }}>{t(response.message[1])}</Typography></Typography>
       </CardContent>
     </Card>}
     {/* Optionally, add a submit button or other components here */}
@@ -129,7 +132,7 @@ export const FoodEmotionalResponsePhenotypePage = () => {
   const totalQuestions = questions?.length
   // Calculate the step size for each question
   const stepSize = totalQuestions > 0 ? 100 / totalQuestions : 0
-
+  const { t } = useTranslation()
   // Initial progress calculation
   const [progress, setProgress] = useState(currentQuestionIndex * stepSize)
 
@@ -151,13 +154,13 @@ export const FoodEmotionalResponsePhenotypePage = () => {
     dispatch(fetchQuestions())
   }, [])
 
-  return <div style={{ display: 'flex', flexDirection: 'column', gap: '12px'}}>
+  return <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
     <Typography>
-      {'Диагностика данного вида аномалий основана на оценке психологической реакции на позитивные или отрицательные эмоции, связанной с возникновением желания частого приема закусок в промежутках между основными приемами пищи.'}
+      {t('Диагностика данного вида аномалий основана на оценке психологической реакции на позитивные или отрицательные эмоции, связанной с возникновением желания частого приема закусок в промежутках между основными приемами пищи.')}
     </Typography>
-    <Typography>{'Для этого используется шкала тревоги и депресии.'}</Typography>
+    <Typography>{t('Для этого используется шкала тревоги и депрессии.')}</Typography>
     <Typography>
-      {'Внимательно подумайте над каждым вопросом и выберите по одному ответу.'}
+      {t('Внимательно подумайте над каждым вопросом и выберите по одному ответу.')}
     </Typography>
     <LinearProgressWithLabel value={progress} />
     <Questionnaire questions={questions} handleProgressNext={handleNext} handleProgressBack={handleBack} />

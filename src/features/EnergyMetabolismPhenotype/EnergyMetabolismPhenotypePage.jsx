@@ -18,6 +18,7 @@ import * as yup from 'yup'
 import { useState } from 'react'
 import { addEnergyData, addEnergySatiationResult } from '../../store/slices/phenotypesSlice.js'
 import { green } from '@mui/material/colors'
+import { useTranslation } from 'react-i18next'
 
 const validationSchema = yup.object({
   bmr: yup
@@ -32,6 +33,7 @@ const validationSchema = yup.object({
 })
 
 export const EnergyMetabolismPhenotypePage = () => {
+  const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
   const [mifflinResult, setMifflinResult] = useState(null)
   const {
@@ -70,119 +72,120 @@ export const EnergyMetabolismPhenotypePage = () => {
 
   return <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
     <Typography>
-      {'Диагностика нарушений, связанных со снижением скорости оьмена веществ (метаболизма), в результате чего энергия, поступающая с пищей, неравномерно распределяется в организме, в меньшей степени снабжая мыщцы и скапливаясь в жировой ткани.'}
+      {t('Диагностика нарушений, связанных со снижением скорости обмена веществ (метаболизма), в результате чего энергия, поступающая с пищей, неравномерно распределяется в организме, в меньшей степени снабжая мыщцы и скапливаясь в жировой ткани.')}
     </Typography>
-    <Typography variant={'h6'} sx={{ fontWeight: 'bold' }}>{'Как выявить фенотип:'}</Typography>
+    <Typography variant={'h6'} sx={{ fontWeight: 'bold' }}>{t('Как выявить фенотип:')}</Typography>
     <Typography>
-      {'Для данного вида диагностики после 8-часового ночного голодания (утром натощак) необходимо пройти Биоимпедансометрию - анализ количества жира и жидкости в организме, мышечной и костной массы и метаболизма. Это можно сделать с помощью прибора InBody 770 или 970.'}
+      {t('Для данного вида диагностики после 8-часового ночного голодания (утром натощак) необходимо пройти Биоимпедансометрию - анализ количества жира и жидкости в организме, мышечной и костной массы и метаболизма. Это можно сделать с помощью прибора InBody 770 или 970.')}
     </Typography>
 
-    <div style={{ display: 'flex', flexWrap: 'wrap'}}>
-      <form onSubmit={formik.handleSubmit} style = {!isMobile ? {width:'50%', paddingRight:'12px', boxSizing:'border-box'} : {width:'100%'}}>
-          <TextField
-            fullWidth
-            label='Показатель BMR InBody'
-            name='bmr'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>BMR</InputAdornment>,
-            }}
-            sx={{marginBottom:'1rem'}}
-            variant='standard'
-            type='number'
-            value={formik.values.bmr}
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <form onSubmit={formik.handleSubmit}
+            style={!isMobile ? { width: '50%', paddingRight: '12px', boxSizing: 'border-box' } : { width: '100%' }}>
+        <TextField
+          fullWidth
+          label={t('Показатель BMR InBody')}
+          name='bmr'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>BMR</InputAdornment>,
+          }}
+          sx={{ marginBottom: '1rem' }}
+          variant='standard'
+          type='number'
+          value={formik.values.bmr}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.bmr && Boolean(formik.errors.bmr)}
+          helperText={formik.touched.bmr && t(formik.errors.bmr)}
+        />
+        <TextField
+          label={t('Рост')}
+          fullWidth
+          name='height'
+          id='standard-start-adornment'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>{t('См')}</InputAdornment>,
+          }}
+          sx={{ marginBottom: '1rem' }}
+          variant='standard'
+          type='number'
+          value={formik.values.height}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.height && Boolean(formik.errors.height)}
+          helperText={formik.touched.height && t(formik.errors.height)}
+        />
+        <TextField
+          label={t('Возраст')}
+          fullWidth
+          name='age'
+          id='standard-start-adornment'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>{t('Лет')}</InputAdornment>,
+          }}
+          sx={{ marginBottom: '1rem' }}
+          variant='standard'
+          type='number'
+          value={formik.values.age}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.age && Boolean(formik.errors.age)}
+          helperText={formik.touched.age && t(formik.errors.age)}
+        />
+        <TextField
+          fullWidth
+          label={t('Вес')}
+          name='weight'
+          id='standard-start-adornment'
+          InputProps={{
+            startAdornment: <InputAdornment position='start'>{t('Кг')}</InputAdornment>,
+          }}
+          sx={{ marginBottom: '1rem' }}
+          variant='standard'
+          type='number'
+          value={formik.values.weight}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.weight && Boolean(formik.errors.weight)}
+          helperText={formik.touched.weight && t(formik.errors.weight)}
+        />
+        <FormControlLabel
+          sx={{ marginBottom: '1rem' }}
+          control={<Switch
+            checked={formik.values.gender}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.bmr && Boolean(formik.errors.bmr)}
-            helperText={formik.touched.bmr && formik.errors.bmr}
-          />
-          <TextField
-            label='Рост'
-            fullWidth
-            name='height'
-            id='standard-start-adornment'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>См</InputAdornment>,
-            }}
-            sx={{marginBottom:'1rem'}}
-            variant='standard'
-            type='number'
-            value={formik.values.height}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.height && Boolean(formik.errors.height)}
-            helperText={formik.touched.height && formik.errors.height}
-          />
-          <TextField
-            label='Возраст'
-            fullWidth
-            name='age'
-            id='standard-start-adornment'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>Лет</InputAdornment>,
-            }}
-            sx={{marginBottom:'1rem'}}
-            variant='standard'
-            type='number'
-            value={formik.values.age}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.age && Boolean(formik.errors.age)}
-            helperText={formik.touched.age && formik.errors.age}
-          />
-          <TextField
-            fullWidth
-            label='Вес'
-            name='weight'
-            id='standard-start-adornment'
-            InputProps={{
-              startAdornment: <InputAdornment position='start'>Кг</InputAdornment>,
-            }}
-            sx={{marginBottom:'1rem'}}
-            variant='standard'
-            type='number'
-            value={formik.values.weight}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.weight && Boolean(formik.errors.weight)}
-            helperText={formik.touched.weight && formik.errors.weight}
-          />
-          <FormControlLabel
-            sx={{marginBottom:'1rem'}}
-            control={<Switch
-              checked={formik.values.gender}
-              onChange={formik.handleChange}
-              name='gender'
-            />}
-            label={formik.values.gender ? 'Мужчина' : 'Женщина'}
-          />
-          <Box sx={{ position: 'relative', width: '100%' }}>
-            <Button type={'submit'} variant={'contained'} fullWidth={true} sx={buttonSx}
-                    disabled={isPending}>{isFulfilled ? 'Пересчитать' : 'Посчитать'}</Button>
-            {isPending && (
-              <CircularProgress
-                size={24}
-                sx={{
-                  color: green[500],
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-12px',
-                  marginLeft: '-12px',
-                }}
-              />
-            )}
-          </Box>
+            name='gender'
+          />}
+          label={t(formik.values.gender ? 'Мужчина' : 'Женщина')}
+        />
+        <Box sx={{ position: 'relative', width: '100%' }}>
+          <Button type={'submit'} variant={'contained'} fullWidth={true} sx={buttonSx}
+                  disabled={isPending}>{t(isFulfilled ? 'Пересчитать' : 'Посчитать')}</Button>
+          {isPending && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: green[500],
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-12px',
+                marginLeft: '-12px',
+              }}
+            />
+          )}
+        </Box>
       </form>
-      {response.result !== null && <Card sx = {!isMobile ? {width:'50%'} : {width:'100%'}}>
+      {response.result !== null && <Card sx={!isMobile ? { width: '50%' } : { width: '100%' }}>
 
         <CardContent>
-          <Typography>Показатель BMR по уравнению Mifflin-St Jeor: <Typography variant={'h6'}
-                                                                               sx={{ fontWeight: 'bold' }}>{mifflinResult}</Typography></Typography>
-          <Typography>Соотношение BMR INBODY/MIFFLIN-ST JEOR: <Typography variant={'h6'}
-                                                                          sx={{ fontWeight: 'bold' }}>{response.result}%</Typography></Typography>
+          <Typography>{t('Показатель BMR по уравнению Mifflin-St Jeor')}: <Typography variant={'h6'}
+                                                                                      sx={{ fontWeight: 'bold' }}>{mifflinResult}</Typography></Typography>
+          <Typography>{t('Соотношение BMR INBODY/MIFFLIN-ST JEOR')}: <Typography variant={'h6'}
+                                                                                 sx={{ fontWeight: 'bold' }}>{response.result}%</Typography></Typography>
           <Typography
-          >Заключение:<Typography variant={'h6'}
-                                  sx={{ fontWeight: 'bold' }}>{response.message}</Typography></Typography>
+          >{t('Заключение')}:<Typography variant={'h6'}
+                                         sx={{ fontWeight: 'bold' }}>{t(response.message)}</Typography></Typography>
         </CardContent>
       </Card>}
     </div>

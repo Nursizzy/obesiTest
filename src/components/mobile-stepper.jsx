@@ -7,13 +7,15 @@ import { cancelDiagnostic } from '../store/slices/systemSlice.js'
 import { clearState } from '../store/slices/phenotypesSlice.js'
 import { Results } from './results.jsx'
 import AssignmentIcon from '@mui/icons-material/Assignment'
+import { useTranslation } from 'react-i18next'
+import { LanguageComponent } from './language.jsx'
 
 export const CustomMobileStepper = ({ steps }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [activeStep, setActiveStep] = useState(0)
   const maxSteps = steps.length
-
+  const { t, i18n } = useTranslation()
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
@@ -64,20 +66,24 @@ export const CustomMobileStepper = ({ steps }) => {
             '.MuiSelect-icon': { color: 'white' }, // Optional: changes the dropdown icon color
           }}
         >
-          <ListSubheader>Категории</ListSubheader>
+          <ListSubheader>{t("Категории")}</ListSubheader>
           {steps.map((step, index) =>
             <MenuItem value={index} key={index}>
-              {step.label}
+              {t(step.label)}
             </MenuItem>,
           )}
-          <ListSubheader>Другое</ListSubheader>
+          <ListSubheader>{t('Другое')}</ListSubheader>
           <MenuItem value={maxSteps} key={maxSteps}>
-            {'Результаты'}
+            {t('К результатам')}
           </MenuItem>
         </Select>
       </FormControl>
       {/*<Typography variant={'h6'} sx={{ color: 'white', fontWeight:'bold'}}>{activeStep === maxSteps ? 'Результаты' : steps[activeStep].label}</Typography>*/}
-      <AssignmentIcon onClick={goToResults} sx={{ cursor: 'pointer', color: 'white'}} />
+      <div style={{display:'flex', alignItems: 'center', gap:'12px'}}>
+        <AssignmentIcon onClick={goToResults} sx={{ cursor: 'pointer', color: 'white'}} />
+        <LanguageComponent notAbsolute={true}/>
+      </div>
+
     </Paper>
     {/* Step Content */}
     <div style={{ overflowY: 'scroll', height: '100%' }}>
@@ -96,12 +102,12 @@ export const CustomMobileStepper = ({ steps }) => {
       activeStep={activeStep}
       nextButton={<Button size='small' onClick={handleNext} disabled={activeStep === maxSteps}>
 
-        {activeStep === maxSteps - 1 ? 'Результаты' : 'Следующий'}
+        {t(activeStep === maxSteps - 1 ? 'К результатам' : 'Следующий')}
         <KeyboardArrowRight />
       </Button>}
       backButton={<Button size='small' onClick={handleBack} disabled={activeStep === 0}>
         <KeyboardArrowLeft />
-        Предыдущий
+        {t('Предыдущий')}
       </Button>}
     />
   </div>)

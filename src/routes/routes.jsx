@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import {
-    BmiPhenotypePage,
-    EnergyMetabolismPhenotypePage,
-    FoodEmotionalResponsePhenotypePage,
-    PostMealSatietyPhenotypePage,
-    SatiationPhenotypePage,
+  BmiPhenotypePage,
+  EnergyMetabolismPhenotypePage,
+  FoodEmotionalResponsePhenotypePage,
+  PostMealSatietyPhenotypePage,
+  SatiationPhenotypePage,
 } from '../features'
 import { MainPage } from '../pages/MainPage.jsx'
 import { DiagnosticPage } from '../pages/DiagnosticPage.jsx'

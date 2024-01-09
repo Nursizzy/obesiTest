@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addBMIData, addBmiResult, calculateBMI } from '../../store/slices/phenotypesSlice.js'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import imtLogo from '../../assets/imt_risunok.png'
+import imtLogoRu from '../../assets/imt_risunok.png'
+import imtLogoEn from '../../assets/imt-image.jpg'
 import { green } from '@mui/material/colors'
+import { useTranslation } from 'react-i18next'
 
 const validationSchema = yup.object({
   weight: yup
@@ -37,6 +39,7 @@ const handleBMIResult = (result) => {
 
 
 export const BmiPhenotypePage = () => {
+  const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
   const { response, data, statuses: { isPending, isFulfilled } } = useSelector(state => state.phenotypes.calculateBMI)
   const handleCalculate = (values) => {
@@ -47,46 +50,47 @@ export const BmiPhenotypePage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const buttonSx = {
     ...(isFulfilled && {
-      bgcolor: green[500],
-      '&:hover': {
+      bgcolor: green[500], '&:hover': {
         bgcolor: green[700],
       },
     }),
   }
-
+  const currentLanguage = i18n.language
   const formik = useFormik({
     initialValues: data, validationSchema: validationSchema, onSubmit: (values) => {
       handleCalculate(values)
     },
   })
 
-  return <div style={{ display: 'flex', flexDirection: 'column', gap: '12px'}}>
+  return <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
     <Typography>
-      {'Индекс массы тела позволяет оценить соответствие вашего роста и веса. Рассчитав его, вы поймете, является ваш вес нормальным, избыточным или, наоборот, недостаточным. Данный показатель важен, в частности, для коррекции режима питания.'}
+      {t('Индекс массы тела позволяет оценить соответствие вашего роста и веса. Рассчитав его, вы поймете, является ваш вес нормальным, избыточным или, наоборот, недостаточным. Данный показатель важен, в частности, для коррекции режима питания.')}
     </Typography>
     <Typography variant={'h6'} sx={{ fontWeight: 'bold' }}>
-      {'Как посчитать ИМТ?'}
+      {t('Как посчитать ИМТ?')}
     </Typography>
     <Typography>
-      {'Существует общепринятая формула, по которой рассчитывается индекс. Нужно свой вес в килограммах разделить на рост в квадрате.'}
+      {t('Существует общепринятая формула, по которой рассчитывается индекс. Нужно свой вес в килограммах разделить на рост в квадрате.')}
     </Typography>
     <Typography sx={{ fontWeight: 'bold' }}>
-      {'ИМТ = вес(кг) / рост(см)²'}
+      {t('ИМТ = вес(кг) / рост(см)²')}
     </Typography>
-    <img src={imtLogo} alt={'...'} style ={{maxWidth: '28rem'}} height={'auto'} />
+    <img src={currentLanguage === 'ru' ? imtLogoRu : imtLogoEn} alt={'...'} style={{ maxWidth: '28rem' }}
+         height={'auto'} />
     <Typography>
-      {'Чтобы рассчитать индекс массы тела для женщин и мужчин в онлайн-калькуляторе, введите данные вашего роста и веса в две ячейки, задав свой рост в сантиметрах, а вес в килограммах. Результат вы получите моментально - индекс рассчитывается автоматически.'}
+      {t('Чтобы рассчитать индекс массы тела для женщин и мужчин в онлайн-калькуляторе, введите данные вашего роста и веса в две ячейки, задав свой рост в сантиметрах, а вес в килограммах. Результат вы получите моментально - индекс рассчитывается автоматически.')}
     </Typography>
-    <div style={{ display: 'flex', flexWrap: 'wrap'}}>
-      <form onSubmit={formik.handleSubmit} style = {!isMobile ? {width:'50%', paddingRight:'12px', boxSizing:'border-box'} : {width:'100%'}}>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <form onSubmit={formik.handleSubmit}
+            style={!isMobile ? { width: '50%', paddingRight: '12px', boxSizing: 'border-box' } : { width: '100%' }}>
         <TextField
           fullWidth
-          label='Вес'
+          label={t('Вес')}
           name='weight'
           id='standard-start-adornment'
-          sx={{marginBottom:'1rem'}}
+          sx={{ marginBottom: '1rem' }}
           InputProps={{
-            startAdornment: <InputAdornment position='start'>Кг</InputAdornment>,
+            startAdornment: <InputAdornment position='start'>{t('Кг')}</InputAdornment>,
           }}
           variant='standard'
           type='number'
@@ -98,12 +102,12 @@ export const BmiPhenotypePage = () => {
         />
         <TextField
           fullWidth
-          label='Рост'
+          label={t('Рост')}
           name='height'
           id='standard-start-adornment'
-          sx={{marginBottom:'1rem'}}
+          sx={{ marginBottom: '1rem' }}
           InputProps={{
-            startAdornment: <InputAdornment position='start'>См</InputAdornment>,
+            startAdornment: <InputAdornment position='start'>{t('См')}</InputAdornment>,
           }}
           variant='standard'
           type='number'
@@ -115,28 +119,26 @@ export const BmiPhenotypePage = () => {
         />
         <Box sx={{ position: 'relative', width: '100%' }}>
           <Button type={'submit'} variant={'contained'} fullWidth={true} sx={buttonSx}
-                  disabled={isPending}>{isFulfilled ? 'Пересчитать' : 'Посчитать'}</Button>
-          {isPending && (
-            <CircularProgress
-              size={24}
-              sx={{
-                color: green[500],
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                marginTop: '-12px',
-                marginLeft: '-12px',
-              }}
-            />
-          )}
+                  disabled={isPending}>{t(isFulfilled ? 'Пересчитать' : 'Посчитать')}</Button>
+          {isPending && (<CircularProgress
+            size={24}
+            sx={{
+              color: green[500],
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-12px',
+              marginLeft: '-12px',
+            }}
+          />)}
         </Box>
       </form>
-      {response.result !== null && <Card sx = {!isMobile ? {width:'50%'} : {width:'100%'}}><CardContent>
-        <Typography>Показатель ИМТ: <Typography variant={'h6'}
-                                                sx={{ fontWeight: 'bold' }}>{response.result}</Typography></Typography>
+      {response.result !== null && <Card sx={!isMobile ? { width: '50%' } : { width: '100%' }}><CardContent>
+        <Typography>{t('Показатель ИМТ')}:<Typography variant={'h6'}
+                                                      sx={{ fontWeight: 'bold' }}>{t(response.result)}</Typography></Typography>
         <Typography
-        >Заключение:<Typography variant={'h6'}
-                                sx={{ fontWeight: 'bold' }}>{response.message}</Typography></Typography>
+        >{t('Заключение')}:<Typography variant={'h6'}
+                                       sx={{ fontWeight: 'bold' }}>{t(response.message)}</Typography></Typography>
       </CardContent>
       </Card>}
     </div>

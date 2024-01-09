@@ -18,6 +18,7 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { marks } from './constants.jsx'
 import { green } from '@mui/material/colors'
+import { useTranslation } from 'react-i18next'
 
 const validationSchema = yup.object({
     hungry: yup
@@ -27,6 +28,7 @@ const validationSchema = yup.object({
         .required('Обязательное поле'),
 });
 export const SatiationPhenotypePage = () => {
+    const { t } = useTranslation()
     const dispatch = useDispatch()
     const {response, data, statuses: {isFulfilled, isPending}} = useSelector(state => state.phenotypes.calculateBrainSatiation)
     const handleCalculate = (values) => {
@@ -56,24 +58,24 @@ export const SatiationPhenotypePage = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     return <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
         <Typography variant={'h6'} sx={{ fontWeight: 'bold' }}>
-            {'Инструкции:'}
+            {t('Инструкции')}:
         </Typography>
         <Typography>
-            {'Расположитесь в комфортном положеннии.'}
+            {t('Расположитесь в комфортном положеннии.')}
         </Typography>
         <Typography sx={{fontWeight: 'bold'}}>
-            {'Подумайте о ваших обычных ощущениях голода ДО обычного приема пищи дома.'}
+            {t('Подумайте о ваших обычных ощущениях голода ДО обычного приема пищи дома.')}
         </Typography>
         <Typography>
-            {'Установите бегунок на линейной шкале в том месте, которое соответствует вашему обычному чувству голода перед обычным приемом пищи'}
+            {t('Установите бегунок на линейной шкале в том месте, которое соответствует вашему обычному чувству голода перед обычным приемом пищи')}
         </Typography>
         <form onSubmit={formik.handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
             <Typography gutterBottom variant={'h6'} align={'center'}>
-                {'Насколько вы ощущаете чувство голода?'}
+                {t('Насколько вы ощущаете чувство голода?')}
             </Typography>
             <Stack spacing={2} direction="row" sx={{mb: 1}} alignItems="center">
                 <Typography width={'200px'} sx={{fontStyle: 'italic', color: '#548235', textAlign:'end'}}>
-                    {'Совершенно не ощущаю'}
+                    {t('Совершенно не ощущаю')}
                 </Typography>
                 <Slider
                     width={200}
@@ -86,21 +88,21 @@ export const SatiationPhenotypePage = () => {
                     marks={marks}
                 />
                 <Typography width={'200px'} sx={{fontStyle: 'italic', color: '#548235', textAlign:'start'}}>
-                    {'Ощущаю как никогда раньше'}
+                    {t('Ощущаю как никогда раньше')}
                 </Typography>
             </Stack>
             <Typography sx={{fontWeight: 'bold'}}>
-                {'Подумайте о ваших обычных ощущениях полноты в желудке ПОСЛЕ обычного приема пищу дома.'}
+                {t('Подумайте о ваших обычных ощущениях полноты в желудке ПОСЛЕ обычного приема пищу дома.')}
             </Typography>
             <Typography>
-                {'Установите бегунок на линейной шкале в том месте, которое соответствует вашему обычному чувству полноты в желудке после обыного приема пищи дома'}
+                {t('Установите бегунок на линейной шкале в том месте, которое соответствует вашему обычному чувству полноты в желудке после обыного приема пищи дома')}
             </Typography>
             <Typography gutterBottom variant={'h6'} align={'center'}>
-                {'Насколько вы ощущаете полноту в желудке?'}
+                {t('Насколько вы ощущаете полноту в желудке?')}
             </Typography>
             <Stack spacing={2} direction="row" sx={{mb: 1}} alignItems="center">
                 <Typography width={'200px'} sx={{fontStyle: 'italic', color: '#548235', textAlign:'end'}}>
-                    {'Совсем не полный'}
+                    {t('Совсем не полный')}
                 </Typography>
                 <Slider
                     name='full'
@@ -112,16 +114,16 @@ export const SatiationPhenotypePage = () => {
                     marks={marks}
                 />
                 <Typography width={'200px'} sx={{fontStyle: 'italic', color: '#548235', textAlign:'start'}}>
-                    {'Максимально полный'}
+                    {t('Максимально полный')}
                 </Typography>
             </Stack>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <div style = {!isMobile ? {width:'50%', paddingRight:'12px', boxSizing:'border-box'} : {width:'100%'}}>
                     <TextField
-                        name='hungry'
+                        name={t('hungry')}
                         fullWidth
                         InputProps={{
-                            startAdornment: <InputAdornment position="start">{"Голод"}</InputAdornment>,
+                            startAdornment: <InputAdornment position="start">{t("Голод")}</InputAdornment>,
                         }}
                         sx={{marginBottom:'1rem'}}
                         variant="standard"
@@ -130,13 +132,13 @@ export const SatiationPhenotypePage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={formik.touched.hungry && Boolean(formik.errors.hungry)}
-                        helperText={formik.touched.hungry && formik.errors.hungry}
+                        helperText={formik.touched.hungry && t(formik.errors.hungry)}
                     />
                     <TextField
-                        name='full'
+                        name={t('full')}
                         fullWidth={true}
                         InputProps={{
-                        startAdornment: <InputAdornment position="start">{"Полнота"}</InputAdornment>,
+                        startAdornment: <InputAdornment position="start">{t("Полнота")}</InputAdornment>,
                     }}
                         sx={{marginBottom:'1rem'}}
                         variant="standard"
@@ -145,11 +147,11 @@ export const SatiationPhenotypePage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={formik.touched.full && Boolean(formik.errors.full)}
-                        helperText={formik.touched.full && formik.errors.full}
+                        helperText={formik.touched.full && t(formik.errors.full)}
                     />
                     <Box sx={{position: 'relative', width: '100%'}}>
                         <Button type={'submit'} variant={'contained'} fullWidth={true} sx={buttonSx}
-                                disabled={isPending}>{isFulfilled ? "Пересчитать" : 'Посчитать'}</Button>
+                                disabled={isPending}>{t(isFulfilled ? "Пересчитать" : 'Посчитать')}</Button>
                         {isPending && (
                             <CircularProgress
                                 size={24}
@@ -167,11 +169,11 @@ export const SatiationPhenotypePage = () => {
                 </div>
                 {response.result !== null && <Card sx = {!isMobile ? {width:'50%'} : {width:'100%'}}>
                     <CardContent>
-                        <Typography>Показатель Фенотипа: <Typography variant={'h6'}
-                                                                sx={{fontWeight: 'bold'}}>{response.result}</Typography></Typography>
+                        <Typography>{t('Показатель Фенотипа')}: <Typography variant={'h6'}
+                                                                sx={{fontWeight: 'bold'}}>{t(response.result)}</Typography></Typography>
                         <Typography
-                        >Заключение:<Typography variant={'h6'}
-                                                sx={{fontWeight: 'bold'}}>{response.message}</Typography></Typography>
+                        >{t('Заключение')}:<Typography variant={'h6'}
+                                                sx={{fontWeight: 'bold'}}>{t(response.message)}</Typography></Typography>
                     </CardContent>
                 </Card>}
 

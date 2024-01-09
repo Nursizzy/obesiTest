@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     isStarted: false,
+    language: 'en',
 }
 
 export const systemSlice = createSlice({
@@ -13,11 +14,14 @@ export const systemSlice = createSlice({
             // immutable state based off those changes
             state.isStarted = true
         }, // I need reducer that will reset whole state to initialState
-        cancelDiagnostic: () => initialState
+        cancelDiagnostic: () => initialState,
+        changeSystemLanguage: (state, action) => {
+            state.language = action.payload
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const {startDiagnostic, cancelDiagnostic} = systemSlice.actions
+export const {startDiagnostic, cancelDiagnostic, changeSystemLanguage} = systemSlice.actions
 
 export default systemSlice.reducer
